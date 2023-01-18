@@ -8,9 +8,21 @@ def index(request):
     url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=4f265cde61bea7c1241d1df736c486dd'
     city = 'london'
 
+    err_msg = ''
+
     if request.method == 'POST':
         form = CityForm(request.POST)
-        form.save()
+
+        if form.is_valid():
+            new_city = form.cleaned_data['name']
+            existing_city_count = City.objects.filter(name=new_city).count()
+            
+            if existing_city_count == 0:
+                r = requests.get(url.format(new_city)).json()
+                print(r)
+                form.save()
+            else:
+                err_msg = 'City already exists in the database!'
 
     form = CityForm()
 
