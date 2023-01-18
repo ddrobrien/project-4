@@ -3,8 +3,9 @@ from django.shortcuts import render, redirect
 from .models import City
 from .forms import CityForm
 
+
 def index(request):
-    url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=271d1234d3f497eed5b1d80a07b3fcd1'
+    url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=4f265cde61bea7c1241d1df736c486dd'
 
     err_msg = ''
     message = ''
@@ -46,7 +47,7 @@ def index(request):
 
         city_weather = {
             'city': city.name,
-            'temperature': r['main']['temp'],
+            'temperature': r['temp'],
             'description': r['weather'][0]['description'],
             'icon': r['weather'][0]['icon'],
         }
@@ -54,10 +55,10 @@ def index(request):
         weather_data.append(city_weather)
 
     context = {
-        'weather_data' : weather_data, 
-        'form' : form,
-        'message' : message,
-        'message_class' : message_class
+        'weather_data': weather_data, 
+        'form': form,
+        'message': message,
+        'message_class': message_class
     }
 
     return render(request, 'weather/weather.html', context)
